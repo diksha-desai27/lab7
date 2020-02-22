@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lab7.entities.Comment;
+import lab7.entities.Post;
 import lab7.entities.User;
 
 /**
@@ -64,5 +65,33 @@ public class AnalysisHelper {
         for (int i = 0; i < commentList.size() && i < 5; i++) {
             System.out.println(commentList.get(i));
         }
+    }
+    
+    //find post with most comments
+    public void getPostWithMostComments() {
+        Map<Integer, Post> posts = DataStore.getInstance().getPosts();
+        Map<Integer, Integer> mostComments = new HashMap<>();
+        
+        
+        for(Post post: posts.values()) {
+            for(Comment c: post.getComments()) {
+                int comments = 0;
+                System.out.println("Post:" + post.getPostId() + " " + post.getComments().size());
+                if(mostComments.containsKey(c.getPostId())) {
+                    comments = mostComments.get(c.getPostId());
+                }
+                comments += c.getPostId();
+                mostComments.put(c.getPostId(), comments);
+            }
+        }
+        int max = 0;
+        int maxId = 0;
+        for (int id : mostComments.keySet()) {
+            if (mostComments.get(id) > max) {
+                max = mostComments.get(id);
+                maxId = id;
+            }
+        }
+        System.out.println("Post with most comments: " + maxId);       
     }
 }
