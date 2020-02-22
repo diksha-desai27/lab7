@@ -95,6 +95,7 @@ public class Lab7 {
         // find user with Most Likes
         helper.userWithMostLikes();
         helper.getAvgNumberOfLikesPerComment();
+        helper.getPostsWithMostLikedComments();
         helper.getFiveMostLikedComment();
         helper.getPostWithMostComments();
         helper.getInactiveUsersBasedOnPosts();
