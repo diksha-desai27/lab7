@@ -157,9 +157,9 @@ public class AnalysisHelper {
         Collections.sort(userList, comparator);
         return userList;
     }
-    
-    // get top 5 inactive user based on likes,comments and posts
-     public void getInactiveAndActiveUsers() {
+
+    // get top 5 inactive and active users based on likes,comments and posts
+    public void getInactiveAndActiveUsers() {
         Map<Integer, Integer> userComments = new HashMap<>();
         Map<Integer, Integer> userLikesCount = new HashMap<>();
         Map<Integer, Post> userPosts = DataStore.getInstance().getPosts();
@@ -194,8 +194,13 @@ public class AnalysisHelper {
         userComments.forEach((key, value) -> userPostsCount.merge(key, value, (o1, o2) -> o1.equals(o2) ? o1 : o1 + o2));
 
         userList = sortArrayList(userPostsCount);
-         System.out.println("5 overall inactive users: ");
+        System.out.println("5 overall inactive users: ");
         for (int i = 0; i < 5 && i < userList.size(); i++) {
+            System.out.println("User Id:" + userList.get(i).getKey() + " with Comment, Likes, Posts:" + userList.get(i).getValue());
+        }
+
+        System.out.println("5 overall proactive users: ");
+        for (int i = userList.size() - 1; i > 0 && i > userList.size() - 6; i--) {
             System.out.println("User Id:" + userList.get(i).getKey() + " with Comment, Likes, Posts:" + userList.get(i).getValue());
         }
 
