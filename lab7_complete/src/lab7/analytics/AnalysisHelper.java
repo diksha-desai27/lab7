@@ -157,5 +157,48 @@ public class AnalysisHelper {
         Collections.sort(userList, comparator);
         return userList;
     }
+    
+    // get top 5 inactive user based on likes,comments and posts
+     public void getInactiveAndActiveUsers() {
+        Map<Integer, Integer> userComments = new HashMap<>();
+        Map<Integer, Integer> userLikesCount = new HashMap<>();
+        Map<Integer, Post> userPosts = DataStore.getInstance().getPosts();
+        Map<Integer, Integer> userPostsCount = new HashMap<>();
+        Map<Integer, User> users = DataStore.getInstance().getUsers();
+        ArrayList<Map.Entry<Integer, Integer>> userList = new ArrayList<>();
+        for (User user : users.values()) {
+            for (Comment c : user.getComments()) {
+                int likes = 0;
+                if (userLikesCount.containsKey(user.getId())) {
+                    likes = userLikesCount.get(user.getId());
+                }
+                likes += c.getLikes();
+                userLikesCount.put(user.getId(), likes);
+            }
+        }
+
+        for (Post p : userPosts.values()) {
+            int posts = 0;
+            if (userPostsCount.containsKey(p.getUserId())) {
+                posts = userPostsCount.get(p.getUserId());
+            }
+            posts += 1;
+            userPostsCount.put(p.getUserId(), posts);
+        }
+
+        for (User user : users.values()) {
+            userComments.put(user.getId(), user.getComments().size());
+        }
+
+        userLikesCount.forEach((key, value) -> userPostsCount.merge(key, value, (v1, v2) -> v1.equals(v2) ? v1 : v1 + v2));
+        userComments.forEach((key, value) -> userPostsCount.merge(key, value, (o1, o2) -> o1.equals(o2) ? o1 : o1 + o2));
+
+        userList = sortArrayList(userPostsCount);
+         System.out.println("5 overall inactive users: ");
+        for (int i = 0; i < 5 && i < userList.size(); i++) {
+            System.out.println("User Id:" + userList.get(i).getKey() + " with Comment, Likes, Posts:" + userList.get(i).getValue());
+        }
+
+    }
 
 }
