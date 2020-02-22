@@ -97,6 +97,40 @@ public class AnalysisHelper {
         System.out.println("Avg Number of likes per comment: " + avg );
     }
     
+    //get post with most liked comments
+    public void getPostsWithMostLikedComments()
+    {
+        Map<Integer, Post> post = DataStore.getInstance().getPosts();
+        Map<Integer, Integer> postList = new HashMap<>();
+        int likes = 0;
+        for(Post p: post.values())
+        {
+            for(Comment c: p.getComments())
+            {
+                if(postList.containsKey(c.getPostId())){
+                    likes = postList.get(c.getPostId());
+                }
+                 likes += c.getLikes();
+                postList.put(c.getPostId(), likes);
+            }
+           
+        }
+       
+        int max = 0;
+        int maxId = 0;
+        for (int id : postList.keySet()) {
+            if (postList.get(id) >= max) {
+                max = postList.get(id);
+                maxId = id;
+            }
+        }
+        System.out.println("Post "+ maxId + " has most liked comments.");
+
+       
+    }
+
+    
+    
 
     //find post with most comments
     public void getPostWithMostComments() {
