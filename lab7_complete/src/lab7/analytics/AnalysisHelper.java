@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lab7.entities.Comment;
 import lab7.entities.Post;
 import lab7.entities.User;
@@ -91,7 +93,37 @@ public class AnalysisHelper {
                 maxId = id;
             }
         }
-        System.out.println("Post "+ maxId + " has most comments.");
-        System.out.println("Comments of post id: " + maxId + " " + "are" + posts.get(maxId).getComments());
+        System.out.println("\nPost id "+ maxId + " has most comments.");
+        System.out.println("Comments of post id: " + maxId + " " + "are" + posts.get(maxId).getComments() + "\n");
     }
+    
+    //Top 5 inactive users based on total posts numbers.
+    public void getInactiveUsersBasedOnPosts() {
+        Map<Integer, Post> posts = DataStore.getInstance().getPosts();
+        Map<Integer, User> users = DataStore.getInstance().getUsers();
+        Map<Integer, User> inactiveUsers = new HashMap<>();
+        
+        for(User u: users.values()) {
+            int count = 0;
+            for(Post p: posts.values()) {
+                if(p.getUserId() == u.getId()) {
+                    count++;
+                }
+            }
+            inactiveUsers.put(count, u);
+        }
+        System.out.println("5 Inactive Users Based on Posts");
+        Set set = inactiveUsers.entrySet();
+        Iterator it = set.iterator();
+        int i = 0;
+        while (it.hasNext() && i < 5) {
+            Map.Entry me = (Map.Entry) it.next();
+            System.out.println(me.getValue());
+            i++;
+        }
+
+    }
+    
+    
+    
 }
