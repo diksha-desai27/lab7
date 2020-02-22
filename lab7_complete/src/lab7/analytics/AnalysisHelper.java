@@ -76,7 +76,6 @@ public class AnalysisHelper {
         for(Post post: posts.values()) {
             for(Comment c: post.getComments()) {
                 int comments = 0;
-                System.out.println("Post:" + post.getPostId() + " " + post.getComments().size());
                 if(mostComments.containsKey(c.getPostId())) {
                     comments = mostComments.get(c.getPostId());
                 }
@@ -87,11 +86,12 @@ public class AnalysisHelper {
         int max = 0;
         int maxId = 0;
         for (int id : mostComments.keySet()) {
-            if (mostComments.get(id) > max) {
+            if (mostComments.get(id) >= max) {
                 max = mostComments.get(id);
                 maxId = id;
             }
         }
-        System.out.println("Post with most comments: " + maxId);       
+        System.out.println("Post "+ maxId + " has most comments.");
+        System.out.println("Comments of post id: " + maxId + " " + "are" + posts.get(maxId).getComments());
     }
 }
