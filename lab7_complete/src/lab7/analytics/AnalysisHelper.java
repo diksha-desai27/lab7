@@ -69,6 +69,34 @@ public class AnalysisHelper {
             System.out.println(commentList.get(i));
         }
     }
+    
+    //Average number of likes per comment
+    public void getAvgNumberOfLikesPerComment()
+    {
+        Map<Integer, Integer> userLikesCount = new HashMap<>();
+        Map<Integer, User> users = DataStore.getInstance().getUsers();
+        
+        int likes = 0;
+        int totalComments = 0;
+     
+        for (User user : users.values()) {
+            for (Comment c : user.getComments()) {
+                  if (userLikesCount.containsKey(user.getId())) {
+                    likes = userLikesCount.get(user.getId());
+ 
+                }
+                likes += c.getLikes();   
+            }  
+            totalComments += user.getComments().size();
+       
+        }
+        
+        int avg = 0;
+        avg= likes/totalComments;
+        
+        System.out.println("Avg Number of likes per comment: " + avg );
+    }
+    
 
     //find post with most comments
     public void getPostWithMostComments() {
