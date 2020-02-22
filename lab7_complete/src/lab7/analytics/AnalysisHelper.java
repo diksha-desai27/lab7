@@ -93,8 +93,8 @@ public class AnalysisHelper {
                 maxId = id;
             }
         }
-        System.out.println("Post "+ maxId + " has most comments.");
-        System.out.println("Comments of post id: " + maxId + " " + "are" + posts.get(maxId).getComments());
+        System.out.println("\nPost id "+ maxId + " has most comments.");
+        System.out.println("Comments of post id: " + maxId + " " + "are" + posts.get(maxId).getComments() + "\n");
     }
     
     //Top 5 inactive users based on total posts numbers.
@@ -112,14 +112,13 @@ public class AnalysisHelper {
             }
             inactiveUsers.put(count, u);
         }
-        
+        System.out.println("5 Inactive Users Based on Posts");
         Set set = inactiveUsers.entrySet();
         Iterator it = set.iterator();
         int i = 0;
         while (it.hasNext() && i < 5) {
             Map.Entry me = (Map.Entry) it.next();
-            System.out.print("Key is: " + me.getKey() + " & ");
-            System.out.println("Value is: " + me.getValue());
+            System.out.println(me.getValue());
             i++;
         }
 
