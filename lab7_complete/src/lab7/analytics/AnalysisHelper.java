@@ -64,7 +64,7 @@ public class AnalysisHelper {
             }
         });
 
-        System.out.println("5 most likes comments: ");
+        System.out.println("\n5 most likes comments: ");
         for (int i = 0; i < commentList.size() && i < 5; i++) {
             System.out.println(commentList.get(i));
         }
@@ -94,7 +94,7 @@ public class AnalysisHelper {
         int avg = 0;
         avg= likes/totalComments;
         
-        System.out.println("Avg Number of likes per comment: " + avg );
+        System.out.println("\nAvg Number of likes per comment: " + avg );
     }
     
     //get post with most liked comments
@@ -102,9 +102,10 @@ public class AnalysisHelper {
     {
         Map<Integer, Post> post = DataStore.getInstance().getPosts();
         Map<Integer, Integer> postList = new HashMap<>();
-        int likes = 0;
+
         for(Post p: post.values())
         {
+            int likes = 0;
             for(Comment c: p.getComments())
             {
                 if(postList.containsKey(c.getPostId())){
@@ -124,7 +125,7 @@ public class AnalysisHelper {
                 maxId = id;
             }
         }
-        System.out.println("Post "+ maxId + " has most liked comments.");
+        System.out.println("\nPost "+ maxId + " has most liked comments.");
 
        
     }
@@ -136,6 +137,7 @@ public class AnalysisHelper {
     public void getPostWithMostComments() {
         Map<Integer, Post> posts = DataStore.getInstance().getPosts();
         Map<Integer, Integer> mostComments = new HashMap<>();
+        
 
         for (Post post : posts.values()) {
             for (Comment c : post.getComments()) {
@@ -163,25 +165,27 @@ public class AnalysisHelper {
     public void getInactiveUsersBasedOnPosts() {
         Map<Integer, Post> posts = DataStore.getInstance().getPosts();
         Map<Integer, User> users = DataStore.getInstance().getUsers();
-        Map<Integer, User> inactiveUsers = new HashMap<>();
+        Map<Integer, Integer> userPosts = new HashMap<>();
+        ArrayList<Map.Entry<Integer, Integer>> userList = new ArrayList<>();
 
-        for (User u : users.values()) {
+        for (Post p : posts.values()) {
             int count = 0;
-            for (Post p : posts.values()) {
-                if (p.getUserId() == u.getId()) {
-                    count++;
-                }
+            if (userPosts.containsKey(p.getUserId())) {
+                count = userPosts.get(p.getUserId());
             }
-            inactiveUsers.put(count, u);
+            count += 1;
+            userPosts.put(p.getUserId(), count);   
         }
-        System.out.println("5 Inactive Users Based on Posts");
-        Set set = inactiveUsers.entrySet();
-        Iterator it = set.iterator();
-        int i = 0;
-        while (it.hasNext() && i < 5) {
-            Map.Entry me = (Map.Entry) it.next();
-            System.out.println(me.getValue());
-            i++;
+        
+        for(User u: users.values()){
+          if(!userPosts.containsKey(u.getId())){
+           userPosts.put(u.getId(), 0);   
+          }
+        }
+        
+        userList = sortArrayList(userPosts);
+        for (int i = 0; i < 5 && i < userList.size(); i++) {
+            System.out.println("User Id:" + userList.get(i).getKey() + " with Posts:" + userList.get(i).getValue());
         }
 
     }
@@ -196,7 +200,7 @@ public class AnalysisHelper {
         }
 
         userList = sortArrayList(userComments);
-        System.out.println("5 inactive commenting users: ");
+        System.out.println("\n5 inactive commenting users: ");
         for (int i = 0; i < userList.size() && i < 5; i++) {
             System.out.println("User Id:" + userList.get(i).getKey() + " with Comments:" + userList.get(i).getValue());
         }
@@ -256,12 +260,12 @@ public class AnalysisHelper {
         userComments.forEach((key, value) -> userPostsCount.merge(key, value, (o1, o2) -> o1.equals(o2) ? o1 : o1 + o2));
 
         userList = sortArrayList(userPostsCount);
-        System.out.println("5 overall inactive users: ");
+        System.out.println("\n5 overall inactive users: ");
         for (int i = 0; i < 5 && i < userList.size(); i++) {
             System.out.println("User Id:" + userList.get(i).getKey() + " with Comment, Likes, Posts:" + userList.get(i).getValue());
         }
 
-        System.out.println("5 overall proactive users: ");
+        System.out.println("\n5 overall proactive users: ");
         for (int i = userList.size() - 1; i > 0 && i > userList.size() - 6; i--) {
             System.out.println("User Id:" + userList.get(i).getKey() + " with Comment, Likes, Posts:" + userList.get(i).getValue());
         }
